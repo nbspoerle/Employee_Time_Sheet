@@ -7,10 +7,29 @@ from datetime import date
 
 today = date.today()
 employees = []
+hours_log = {}
 
 root = Tk()
 root.title("Employee Time Sheet")
 root.geometry("500x500")
+
+def log_hours():
+    date = cal.get_date()
+    name = selection_emp.get()
+    hours = hours_worked.get()
+
+    if date not in hours_log:
+        hours_log[date] = []
+
+    hours_log[date].append([name, hours])
+
+    print(hours_log)
+
+
+#button setup for saving hours
+save_entry = Button(root, text="Log Hours", command=log_hours)
+save_entry.pack(pady=5)
+
 
 # -------------------------
 # Hours Worked (ROOT uses PACK)
