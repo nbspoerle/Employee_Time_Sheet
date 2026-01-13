@@ -13,17 +13,35 @@ root = Tk()
 root.title("Employee Time Sheet")
 root.geometry("500x500")
 
+def retrieve_hours_worked():
+    pass
+
+button = Button(root, text="Get Hours", command=retrieve_hours_worked)
+button.pack(pady=10)
+
+#Log hours
 def log_hours():
-    date = cal.get_date()
+    date_key = cal.get_date()
     name = selection_emp.get()
     hours = hours_worked.get()
 
-    if date not in hours_log:
-        hours_log[date] = []
+    if name == "No employees yet":
+        messagebox.showerror("Error", "Please add an employee first")
+        return
 
-    hours_log[date].append([name, hours])
+    if not hours:
+        messagebox.showerror("Error", "Please enter hours worked")
+        return
+
+    # Create date dictionary if it doesn't exist
+    if date_key not in hours_log:
+        hours_log[date_key] = {}
+
+    # Save or overwrite employee hours for that date
+    hours_log[date_key][name] = hours
 
     print(hours_log)
+
 
 
 #button setup for saving hours
@@ -37,10 +55,10 @@ save_entry.pack(pady=5)
 hours_worked = StringVar()
 
 hours_worked_label = Label(root, text="Hours Worked")
-hours_worked_label.pack(pady=10)
+hours_worked_label.pack(pady=5)
 
 hours_worked_entry = Entry(root, textvariable=hours_worked)
-hours_worked_entry.pack(pady=10)
+hours_worked_entry.pack(pady=5)
 
 # -------------------------
 # Dropdown (ROOT uses PACK)
@@ -48,7 +66,7 @@ hours_worked_entry.pack(pady=10)
 selection_emp = StringVar(value="No employees yet")
 
 dropdown = OptionMenu(root, selection_emp, "No employees yet")
-dropdown.pack(pady=10)
+dropdown.pack(pady=5)
 
 def refresh_dropdown():
     menu = dropdown["menu"]
@@ -73,15 +91,15 @@ def refresh_dropdown():
 # Calendar (ROOT uses PACK)
 # -------------------------
 cal = Calendar(root, selectmode='day', year=today.year, month=today.month, day=today.day)
-cal.pack(pady=10)
+cal.pack(pady=5)
 
 date_label = Label(root, text="")
-date_label.pack(pady=10)
+date_label.pack(pady=5)
 
 def grab_date():
     date_label.config(text="Selected Date is: " + cal.get_date())
 
-Button(root, text="Get Date", command=grab_date).pack(pady=10)
+Button(root, text="Get Date", command=grab_date).pack(pady=5)
 
 # -------------------------
 # Add Employee Popup (TOPLEVEL uses GRID)
